@@ -1,29 +1,21 @@
 import { useState, useEffect } from "react";
 import "./App.css";
 import backgroundImg from "./assets/1711227366316.jpeg";
-import {
-  FaPhoneAlt,
-  FaGlobe,
-  FaWhatsapp,
-  FaFacebookF,
-  FaInstagram,
-  FaLinkedin,
-  FaTwitter,
-  FaSpotify,
-  FaGithub,
-  FaPinterestP,
-} from "react-icons/fa";
-import { SiViber, SiTiktok, SiSkype } from "react-icons/si";
-import { MdEmail } from "react-icons/md";
+import iconSets from "./components/Icons";
+import Button from "./components/Button";
 
 function App() {
   const [cardData, setCardData] = useState({
     name: "",
     lastname: "",
     position: "",
+    company: "",
+    adress: "",
     contactInfo: [],
     cardImage: "",
   });
+
+  const [iconSet, setIconSet] = useState("mac");
 
   useEffect(() => {
     const fetchData = async () => {
@@ -43,11 +35,16 @@ function App() {
         items.find((item) => item.name === "Lastname")?.value || "";
       const position =
         items.find((item) => item.name === "Position")?.value || "";
+      const company =
+        items.find((item) => item.name === "Company")?.value || "";
+      const adress = items.find((item) => item.name === "Adress")?.value || "";
 
       setCardData({
         name,
         lastname,
         position,
+        company,
+        adress,
         contactInfo: items,
         cardImage: data?.data?.cardImage || "",
       });
@@ -61,28 +58,20 @@ function App() {
     console.log(value);
   };
 
-  const excludedNames = ["Firstname", "Lastname", "Position"];
+  const excludedNames = [
+    "Firstname",
+    "Lastname",
+    "Position",
+    "Adress",
+    "Company",
+  ];
 
   const filteredContactInfo = cardData.contactInfo.filter(
     (item) => !excludedNames.includes(item.name)
   );
 
-  const iconMap = {
-    Phone: <FaPhoneAlt />,
-    Website: <FaGlobe />,
-    Whatsapp: <FaWhatsapp />,
-    Viber: <SiViber />,
-    Facebook: <FaFacebookF />,
-    Instagram: <FaInstagram />,
-    Email: <MdEmail />,
-    Linkedin: <FaLinkedin />,
-    Twitter: <FaTwitter />,
-    Tiktok: <SiTiktok />,
-    Skype: <SiSkype />,
-    Github: <FaGithub />,
-    Pinterest: <FaPinterestP />,
-    Spotify: <FaSpotify />,
-  };
+  const icons = iconSets[iconSet] || {};
+
   return (
     <div className="d-flex flex-column align-items-center justify-content-center">
       <div
@@ -107,16 +96,35 @@ function App() {
       <div className="text-center" style={{ marginTop: "8rem" }}>
         <h2 className="mb-1">{`${cardData.name} ${cardData.lastname}`}</h2>
         <p className="text-muted mb-4">{cardData.position}</p>
-        <div className="d-flex flex-column ">
+        <p>{cardData.company}</p>
+        <p>{cardData.adress}</p>
+        <div className="mb-4">
+          <button
+            onClick={() => setIconSet("mac")}
+            className={`btn ${
+              iconSet === "mac" ? "btn-dark" : "btn-secondary"
+            } me-2`}
+          >
+            Mac Icons
+          </button>
+          <button
+            onClick={() => setIconSet("android")}
+            className={`btn ${
+              iconSet === "android" ? "btn-dark" : "btn-secondary"
+            }`}
+          >
+            Android Icons
+          </button>
+        </div>
+        <div className="d-flex flex-column">
           {filteredContactInfo.map((item, index) => (
-            <button
+            <Button
               key={index}
+              iconType={iconSet}
+              iconName={item.placeholder}
+              label={item.placeholder}
               onClick={() => handleButtonClick(item.value)}
-              className="btn btn-dark btn-lg mb-4"
-            >
-              {iconMap[item.placeholder] || <FaPhoneAlt />}
-              <span className="ms-2">{item.placeholder}</span>
-            </button>
+            />
           ))}
         </div>
       </div>
