@@ -1,6 +1,20 @@
 import { useState, useEffect } from "react";
 import "./App.css";
 import backgroundImg from "./assets/1711227366316.jpeg";
+import {
+  FaPhoneAlt,
+  FaGlobe,
+  FaWhatsapp,
+  FaFacebookF,
+  FaInstagram,
+  FaLinkedin,
+  FaTwitter,
+  FaSpotify,
+  FaGithub,
+  FaPinterestP,
+} from "react-icons/fa";
+import { SiViber, SiTiktok, SiSkype } from "react-icons/si";
+import { MdEmail } from "react-icons/md";
 
 function App() {
   const [cardData, setCardData] = useState({
@@ -53,28 +67,44 @@ function App() {
     (item) => !excludedNames.includes(item.name)
   );
 
+  const iconMap = {
+    Phone: <FaPhoneAlt />,
+    Website: <FaGlobe />,
+    Whatsapp: <FaWhatsapp />,
+    Viber: <SiViber />,
+    Facebook: <FaFacebookF />,
+    Instagram: <FaInstagram />,
+    Email: <MdEmail />,
+    Linkedin: <FaLinkedin />,
+    Twitter: <FaTwitter />,
+    Tiktok: <SiTiktok />,
+    Skype: <SiSkype />,
+    Github: <FaGithub />,
+    Pinterest: <FaPinterestP />,
+    Spotify: <FaSpotify />,
+  };
   return (
     <div className="d-flex flex-column align-items-center justify-content-center">
-    <div
-      style={{
-        backgroundImage: `url(${backgroundImg})`,
-        width: "100vw",
-        height: "175px", 
-        backgroundSize: "cover",
-        backgroundPosition: "center",
-        display: "flex",
-        alignItems: "center",
-        justifyContent: "center",
-      }}
-    >
-      <img
-        src={`https://storage.googleapis.com/addmeimages/${cardData.cardImage}`}
-        alt="user-img"
-        className="rounded-circle img-thumbnail mb-3"
-        style={{ width: "150px", height: "150px",  marginTop: "13rem" }}
-      />
-    </div>
-      <div className="text-center" style={{marginTop: "8rem" }}>
+      <div
+        style={{
+          backgroundImage: `url(${backgroundImg})`,
+          width: "100vw",
+          height: "175px",
+          backgroundSize: "cover",
+          backgroundPosition: "center",
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+        }}
+      >
+        <img
+          src={`https://storage.googleapis.com/addmeimages/${cardData.cardImage}`}
+          alt="user-img"
+          className="rounded-circle img-thumbnail mb-3"
+          style={{ width: "150px", height: "150px", marginTop: "13rem" }}
+        />
+      </div>
+      <div className="text-center" style={{ marginTop: "8rem" }}>
         <h2 className="mb-1">{`${cardData.name} ${cardData.lastname}`}</h2>
         <p className="text-muted mb-4">{cardData.position}</p>
         <div className="d-flex flex-column ">
@@ -84,7 +114,8 @@ function App() {
               onClick={() => handleButtonClick(item.value)}
               className="btn btn-dark btn-lg mb-4"
             >
-              {item.placeholder}
+              {iconMap[item.placeholder] || <FaPhoneAlt />}
+              <span className="ms-2">{item.placeholder}</span>
             </button>
           ))}
         </div>
